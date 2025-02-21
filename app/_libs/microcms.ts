@@ -61,26 +61,40 @@ export const getNewsDetail = async (
   queries?: MicroCMSQueries
 ) => {
   const detailData = await client.getListDetail<News>({
-      endpoint: "news",
-      contentId,
-      queries,
+    endpoint: "news",
+    contentId,
+    queries,
       customRequestInit: {
         next: {
           revalidate: queries?.draftKey === undefined ? 60 : 0,
         },
       },
     });
+    return detailData;
+  }
+
+  export const getCategoryDetail = async (
+    contentId: string,
+    queries?: MicroCMSQueries
+  ) => {
+    const detailData = await client.getListDetail<Category>({
+      endpoint: "categories",
+      contentId,
+      queries,
+  });
   return detailData;
 }
 
-export const getCategoryDetail = async (
-  contentId: string,
-  queries?: MicroCMSQueries
-) => {
-  const detailData = await client.getListDetail<Category>({
-    endpoint: "categories",
-    contentId,
-    queries,
+export const getAllNewsList = async () => {
+  const listData = await client.getAllContents<News>({
+    endpoint: "news",
   });
-  return detailData;
+  return listData;
+}
+
+export const getAllCategoryList = async () => {
+  const listData = await client.getAllContents<Category>({
+    endpoint: "categories",
+  });
+  return listData;
 }
